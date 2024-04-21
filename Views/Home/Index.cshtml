@@ -1,0 +1,205 @@
+﻿
+@{
+    ViewData["Title"] = "Strona główna";
+}
+
+@await Html.PartialAsync("~/Views/Home/HomeModals/ConfirmAddToCartModal.cshtml")
+@await Html.PartialAsync("~/Views/Home/HomeModals/NoPermissionsModal.cshtml")
+
+@if (TempData.ContainsKey("ShowModal"))
+{
+    string modalName = (string)TempData["ShowModal"];
+                        
+    <script>
+        $(document).ready(function () {
+            $('#@modalName').modal("show");
+        });
+    </script>
+}
+
+<div class="menu">
+    <div class="row">
+        <a class="menu-card col-md-2 px-1 pt-1" asp-controller="Category" asp-action="Laptop">
+            <div class="content" style="background-image: url('./img/Action/Laptop.webp');">
+                <div class="menu-title">
+                    Laptopy
+                </div>
+            </div>
+        </a>
+
+        <a class="menu-card col-md-2 px-1 pt-1" asp-controller="Category" asp-action="Phone">
+            <div class="content" style="background-image: url('./img/Action/Phone.webp');">
+                <div class="menu-title">
+                    Telefony
+                </div>
+            </div>
+        </a>
+
+        <div class="menu-card col-md-4 px-1 pt-1">
+            <div class="main-logo" style="background-image: url('./img/main-logo.png'); background-size: contain">
+                <div class="menu-search">
+                    @using (Html.BeginForm("Index", "Search", FormMethod.Get))
+                    {
+                        <div class="input-group">
+                                <input name=query class="form-control input-search text-center" type="text" placeholder="MoonlighShadow" required/>
+                                <span class="input-group-text">
+                                    <input type="submit" value="Wyszukaj" class="bi bi-search"></input>
+                                </span>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <a class="menu-card col-md-2 px-1 pt-1" asp-controller="Category" asp-action="Camera">
+            <div class="content" style="background-image: url('./img/Action/Camera.webp');">
+                <div class="menu-title">
+                    Aparaty
+                </div>
+            </div>
+        </a>
+
+        <a class="menu-card col-md-2 px-1 pt-1" asp-controller="Category" asp-action="Game">
+            <div class="content" style="background-image: url('./img/Action/Game.webp');">
+                <div class="menu-title">
+                    Gry i Programy
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+
+<div class="recommend">
+    <div class="title">
+        $ Bestsellary - bo jestem tego warty
+    </div>
+
+    <div class="row slider-bestsellary">
+        @foreach (var product in ViewBag.ProductBestsellerList)
+        {
+            <div class="col-md-6 col-lg-4 col-xxl-3">
+                <div class="product-card">
+                    <div class="image" style="background-image: url('@product.ImagesPath[0]');"></div>
+                    <div class="description">
+                        <div class="product">
+                            <div class="product-name d-inline">
+                                <p class="d-inline float-start m-0 p-0">Nazwa produktu:</p>
+                                <p class="d-inline float-end m-0 p-0 text-success">@product.Name</p>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="product-cost d-inline">
+                                <p class="d-inline float-start m-0 p-0">Cena produktu:</p>
+                                <p class="d-inline float-end m-0 p-0 fw-bold text-danger">@product.Price zł</p>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="button row">
+                            <a class="col btn btn-success text-success btn-open-ofert"
+                            asp-controller="Cart" asp-action="AddOrder" asp-route-category="@product.Category" asp-route-id="@product.Id"
+                            asp-route-returnUrl="/Home">
+                            <i class="bi bi-bag-fill"></i>
+                            Dodaj do koszyka
+                            </a>
+                            <a asp-controller="Product" asp-action="@product.Category" asp-route-id="@product.Id"
+                            class="col btn btn-danger text-danger btn-buy-now">
+                                <i class="bi bi-clipboard-data"></i>
+                                Zobacz ofertę
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="clearfix"></div>
+
+<div class="recommend">
+    <div class="title">
+        * Nowości - dopiero co wystawione
+    </div>
+
+    <div class="row slider-bestsellary">
+        @foreach (var product in ViewBag.ProductLastAddedList)
+        {
+            <div class="col-md-6 col-lg-4 col-xxl-3">
+                <div class="product-card">
+                    <div class="image" style="background-image: url('@product.ImagesPath[0]');"></div>
+                    <div class="description">
+                        <div class="product">
+                            <div class="product-name d-inline">
+                                <p class="d-inline float-start m-0 p-0">Nazwa produktu:</p>
+                                <p class="d-inline float-end m-0 p-0 text-success">@product.Name</p>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="product-cost d-inline">
+                                <p class="d-inline float-start m-0 p-0">Cena produktu:</p>
+                                <p class="d-inline float-end m-0 p-0 fw-bold text-danger">@product.Price zł</p>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="button row">
+                            <a class="col btn btn-success text-success btn-open-ofert"
+                            asp-controller="Cart" asp-action="AddOrder" asp-route-category="@product.Category" asp-route-id="@product.Id"
+                            asp-route-returnUrl="/Home">
+                            <i class="bi bi-bag-fill"></i>
+                            Dodaj do koszyka
+                            </a>
+                            <a asp-controller="Product" asp-action="@product.Category" asp-route-id="@product.Id"
+                            class="col btn btn-danger text-danger btn-buy-now">
+                                <i class="bi bi-clipboard-data"></i>
+                                Zobacz ofertę
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="recommend">
+    <div class="title">
+        ~ Polecamy i kłaniamy się nisko
+    </div>
+
+    <div class="row slider-bestsellary">
+        @foreach (var product in ViewBag.ProductRecomendedList)
+        {
+            <div class="col-md-6 col-lg-4 col-xxl-3">
+                <div class="product-card">
+                    <div class="image" style="background-image: url('@product.ImagesPath[0]');"></div>
+                    <div class="description">
+                        <div class="product">
+                            <div class="product-name d-inline">
+                                <p class="d-inline float-start m-0 p-0">Nazwa produktu:</p>
+                                <p class="d-inline float-end m-0 p-0 text-success">@product.Name</p>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="product-cost d-inline">
+                                <p class="d-inline float-start m-0 p-0">Cena produktu:</p>
+                                <p class="d-inline float-end m-0 p-0 fw-bold text-danger">@product.Price zł</p>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="button row">
+                            <a class="col btn btn-success text-success btn-open-ofert"
+                            asp-controller="Cart" asp-action="AddOrder" asp-route-category="@product.Category" asp-route-id="@product.Id"
+                            asp-route-returnUrl="/Home">
+                            <i class="bi bi-bag-fill"></i>
+                            Dodaj do koszyka
+                            </a>
+                            <a asp-controller="Product" asp-action="@product.Category" asp-route-id="@product.Id"
+                            class="col btn btn-danger text-danger btn-buy-now">
+                                <i class="bi bi-clipboard-data"></i>
+                                Zobacz ofertę
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
